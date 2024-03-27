@@ -3,6 +3,7 @@ import fetch from 'node-fetch';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import coursesRouter from './courses/api.js';
+import mapsRouter from './maps/api.js';
 import bodyParser from 'body-parser';
 dotenv.config();
 
@@ -12,7 +13,8 @@ app.use(cors()); // Enable CORS for all routes
 
 const PORT = 80;
 
-app.use('/api', coursesRouter)
+app.use('/api', coursesRouter);
+app.use('api', mapsRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
