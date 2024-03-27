@@ -1,27 +1,12 @@
 import { Router } from 'express';
+import { courseSeeds } from './seeds.js';
 
-const router1 = Router();
-const courses = [
-    {
-        name: "English",
-        building: "LSRC",
-        startTime: "12:10",
-        endTime: "12:40",
-        days: "Monday and Wednesday",
-        netid: "adb117"
-    },
-    {
-        name: "Math",
-        building: "LSRC",
-        startTime: "12:10",
-        endTime: "12:40",
-        days: "Monday and Wednesday",
-        netid: "pkb31"
-    }
-];
+
+const coursesRouter = Router();
+const courses = courseSeeds;
 
 //Example:   http://localhost:80/api/courses/adb117
-router1.get('/courses/:netid', async (req, res) => {
+coursesRouter.get('/courses/:netid', async (req, res) => {
     const { netid } = req.params;
     let ret = [];
 
@@ -33,5 +18,17 @@ router1.get('/courses/:netid', async (req, res) => {
     res.status(200).json(ret);
 });
 
+// when doing this request on frontent, make sure to send the course in course format
+coursesRouter.post('/courses/new', async (req, res) => {
+    const newCourse = req.body;
+    console.log(newCourse);
 
-export default router1;
+    if (!newCourse.name || !newCourse.building || !newCourse.startTime || !newCourse.endTime || !newCourse.days || !newCourse.netid) {
+        return res.status(400).json({ error: 'All fields are required for course creation' });
+    }
+
+    courses.push(newCourse);
+    res.status(200).json(newCourse);
+})
+
+export default coursesRouter;

@@ -2,15 +2,17 @@ import express from 'express';
 import fetch from 'node-fetch';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import router1 from './courses/api.js';
+import coursesRouter from './courses/api.js';
+import bodyParser from 'body-parser';
 dotenv.config();
 
 const app = express();
+app.use(bodyParser.json());
 app.use(cors()); // Enable CORS for all routes
 
 const PORT = 80;
 
-app.use('/api', router1)
+app.use('/api', coursesRouter)
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
