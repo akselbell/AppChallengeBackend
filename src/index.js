@@ -2,6 +2,7 @@ import express from 'express';
 import fetch from 'node-fetch';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import router1 from './courses/api.js';
 dotenv.config();
 
 const app = express();
@@ -9,12 +10,14 @@ app.use(cors()); // Enable CORS for all routes
 
 const PORT = 80;
 
+app.use('/api', router1)
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
 app.post('/api/getData/:netid', async (req, res) => {
-    const { netid } = req.params;
+    //const { netid } = req.params;
     // const url = `https://streamer.oit.duke.edu/ldap/people/netid/${netid}`;
     // try {
     //   const response = await fetch(url, {
