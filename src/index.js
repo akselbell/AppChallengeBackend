@@ -14,13 +14,13 @@ app.use(cors()); // Enable CORS for all routes
 const PORT = 80;
 
 app.use('/api', coursesRouter);
-app.use('api', mapsRouter);
+app.use('/api', mapsRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-app.post('/api/getData/:netid', async (req, res) => {
+app.get('/api/getData/:netid', async (req, res) => {
     const { netid } = req.params;
     const url = `https://streamer.oit.duke.edu/ldap/people?q=${netid}&access_token=${process.env.API_KEY}`;
     try {
