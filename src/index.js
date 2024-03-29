@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import coursesRouter from './courses/api.js';
 import mapsRouter from './maps/api.js';
 import bodyParser from 'body-parser';
+import readBusData from './buses/index.js';
 dotenv.config();
 
 const app = express();
@@ -18,7 +19,13 @@ app.use('/api', mapsRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  readBusData();
 });
+
+export const locations = {
+  westBusStop: "ChIJ0UhDlq_mrIkR88gG4tqrCNw",
+  eastBusStop: "ChIJf19QUwjkrIkReKb_L7AQnl8"
+};
 
 app.get('/api/getData/:netid', async (req, res) => {
     const { netid } = req.params;
