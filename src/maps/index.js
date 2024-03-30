@@ -14,3 +14,51 @@ export const calculateRoute = async (origin, dest) => {
       return { error: 'Internal Server Error' };
     }
 } 
+
+export const longLatToPlaceID = (longitude, latitude) => {
+  const fetchData = async () => {
+    const apiUrl = 'https://places.googleapis.com/v1/places:searchNearby';
+
+    const requestData = {
+        maxResultCount: 1,
+        locationRestriction: {
+            circle: {
+                center: {
+                    latitude: longitude,
+                    longitude: latitude
+                },
+                radius: 100.0
+            }
+        }, 
+        languageCode: "en"
+    };
+
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Goog-Api-Key': process.env.GOOGLE_MAPS_API_KEY,
+            'X-Goog-FieldMask': 'places.id'
+        },
+        body: JSON.stringify(requestData)
+    };
+
+    try {
+        const response = await fetch(apiUrl, requestOptions);
+        const data = await response.json();
+        // Extract Place ID from the response
+        if (data && data.places && data.places.length > 0) {
+            const placeId = data.places[0].id;
+            console.log(`Place ID: ${placeId}`);
+        } else {
+            console.log('No results found');
+            console.log(data);
+        }
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+  };
+
+  fetchData();
+
+}

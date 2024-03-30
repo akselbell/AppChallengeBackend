@@ -1,6 +1,7 @@
 import converter from './data.js';
+import { calculateRoute } from '../maps/index.js';
 
-const calcTimeToBus = (courseStartTime, courseLocation) => {
+const calcTimeToBus = (courseStartTime, courseLocation, oppositeBusStop) => {
     //classStartTime must be in format: 6:30 AM
     const wrapper = [];
     wrapper.push(courseStartTime);
