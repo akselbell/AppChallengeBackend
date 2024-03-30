@@ -52,7 +52,7 @@ app.get('/api/getData/:netid', async (req, res) => {
     }
 });
 
-app.get('/api/checktime', async (req, res) => {
+app.post('/api/checktime', async (req, res) => {
   // req must have atttributes: course, currentCampus, longitude, latitude, netid  
   
   // if time now is not within 30 min of start time, just return response saying not time yet
@@ -72,7 +72,7 @@ app.get('/api/checktime', async (req, res) => {
 
   const timeToBeAtCurrentStop = getClosestBus(calculatedLeaveTime, req.body.currentCampus);
 
-  const timeToCurrentStop = await calculateRoute(currentLocationPlaceID, nextStopID);
+  const timeToCurrentStop = await calculateRoute(currentLocationPlaceID, currentStopID);
   
   const now = new Date();
   if(dateToSeconds(now) + timeToCurrentStop >= timeToBeAtCurrentStop-60) {
