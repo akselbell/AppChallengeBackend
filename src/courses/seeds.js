@@ -13,6 +13,14 @@ export const courseSeeds = [
         startTime: "12:10",
         endTime: "12:40",
         days: "Monday and Wednesday",
-        netid: "pkb31"
+        netid: "pkb20"
+    },
+    {
+        name: "Math",
+        building: "LSRC",
+        startTime: "12:10",
+        endTime: "12:40",
+        days: "Monday and Wednesday",
+        netid: "adb117"
     }
 ];
