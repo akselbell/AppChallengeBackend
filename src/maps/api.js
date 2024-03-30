@@ -16,7 +16,7 @@ mapsRouter.get('/maps/calculateRoute', async (req, res) => {
           },
         });
         const data = await response.json();
-        res.json(data);
+        res.json(data.rows[0].elements[0].duration.value); //returns number of seconds to walk to dest
       } catch (error) {
         console.error('Error fetching data:', error);
         res.status(500).json({ error: 'Internal Server Error' });

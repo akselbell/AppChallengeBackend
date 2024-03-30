@@ -24,7 +24,9 @@ app.listen(PORT, () => {
 
 export const locations = {
   westBusStop: "ChIJ0UhDlq_mrIkR88gG4tqrCNw",
-  eastBusStop: "ChIJf19QUwjkrIkReKb_L7AQnl8"
+  eastBusStop: "ChIJf19QUwjkrIkReKb_L7AQnl8",
+  "Bio Sci": "ChIJeYjKW7DmrIkRJ9nXzx3hcfQ",
+  "Market Place": "ChIJV6yr2gnkrIkR2ZdV2qdFQV4"
 };
 
 app.get('/api/getData/:netid', async (req, res) => {

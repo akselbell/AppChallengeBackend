@@ -5,7 +5,8 @@ export const courseSeeds = [
         startTime: "12:10",
         endTime: "12:40",
         days: "Monday and Wednesday",
-        netid: "adb117"
+        netid: "adb117",
+        campus: "East"
     },
     {
         name: "Math",
@@ -13,6 +14,7 @@ export const courseSeeds = [
         startTime: "12:10",
         endTime: "12:40",
         days: "Monday and Wednesday",
-        netid: "pkb31"
+        netid: "pkb31",
+        campus: "West"
     }
 ];
