@@ -60,7 +60,7 @@ app.post('/api/checktime', async (req, res) => {
   const nextStop = req.currentCampus == 'East' ? "West" : "East";
   console.log("You want to get to " + nextStop + " campus");
   const nextStopID = locations[`${nextStop}`];
-  const currentStopID = locations[`${req.currentCampus}`];
+  const currentStopID = locations[`${req.body.currentCampus}`];
 
   const nextClass = calculateNextClass(req.body.netid);
 
