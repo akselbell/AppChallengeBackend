@@ -57,10 +57,10 @@ app.post('/api/checktime', async (req, res) => {
   
   // if time now is not within 30 min of start time, just return response saying not time yet
   
-  const nextStop = req.currentCampus == 'East' ? "West" : "East";
+  const nextStop = req.body.currentCampus == 'East' ? "West" : "East";
   console.log("You want to get to " + nextStop + " campus");
   const nextStopID = locations[`${nextStop}`];
-  console.log(nextStopID);
+  // console.log(nextStopID);
   const currentStopID = locations[`${req.body.currentCampus}`];
 
   const nextClass = calculateNextClass(req.body.netid);
@@ -68,6 +68,7 @@ app.post('/api/checktime', async (req, res) => {
   const currentLocationPlaceID = await longLatToPlaceID(req.body.longitude, req.body.latitude);
 
   const courseLocationID = locations[`${nextClass.building}`];
+  console.log("biddle: " + courseLocationID);
 
   const calculatedLeaveTime = await calcTimeToBus(nextClass.startTime, courseLocationID, nextStopID);
 
