@@ -34,6 +34,7 @@ const readBusData = () => {
 };
 
 export function converter(times) {
+
     const timesInSeconds = times.map(entry => {
         const time = entry['STOP'];
         const [hoursMinutes, period] = time.split(' ');

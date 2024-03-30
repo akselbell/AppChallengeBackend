@@ -18,11 +18,11 @@ export const courseSeeds = [
     {
         name: "Math",
         building: "LSRC",
-        startTime: "12:10 PM",
+        startTime: "6:15 PM",
         days: "Monday, Wednesday",
         netid: "adb117",
         campus: "West"
-    }
+    },
     {
         name: "Math",
         building: "LSRC",
