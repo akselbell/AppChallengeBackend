@@ -3,7 +3,7 @@ import fetch from 'node-fetch';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import coursesRouter from './courses/api.js';
-import { calculateRoute } from './maps/index.js';
+import { calculateRoute, longLatToPlaceID } from './maps/index.js';
 import bodyParser from 'body-parser';
 import readBusData from './buses/data.js';
 import calcTimeToBus from './buses/index.js';
@@ -22,12 +22,11 @@ app.use('/api', coursesRouter);
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   readBusData();
-  console.log(dateToSeconds(new Date()));
 });
 
 export const locations = {
-  westBusStop: "ChIJ0UhDlq_mrIkR88gG4tqrCNw",
-  eastBusStop: "ChIJf19QUwjkrIkReKb_L7AQnl8",
+  East: "ChIJ0UhDlq_mrIkR88gG4tqrCNw",
+  West: "ChIJf19QUwjkrIkReKb_L7AQnl8",
   "Biological Science": "ChIJeYjKW7DmrIkRJ9nXzx3hcfQ",
   "Marketplace": "ChIJV6yr2gnkrIkR2ZdV2qdFQV4"
 };
@@ -51,20 +50,26 @@ app.get('/api/getData/:netid', async (req, res) => {
 });
 
 app.get('/api/checktime', async (req, res) => {
-  // req must have atttributes: classStartTime, courseLocation, currentCampus, currentLocation  
+  // req must have atttributes: classStartTime, courseLocation, currentCampus, longitude, latitude  
+  
   // if time now is not within 30 min of start time, just return response saying not time yet
+  
+  const nextStop = req.currentCampus == 'East' ? "West" : "East";
+  const nextStopID = locations[`${nextStop}`];
+  console.log("You are trying to get to " + nextStop + "bus stop at ID: " + nextStopID);
+
   const nextClass = calculateNextClass();
-  const calculatedLeaveTime = calcTimeToBus(nextClass.startTime, req.courseLocation);
-  const timeToBeAtCurrentStop = getClosestBus(calculatedLeaveTime, currentCampus);
 
-  const nextStop = req.campus == 'East' ? "West" : "East";
-  console.log("You are trying to get to " + nextStop + "bus stop");
+  const currentLocationPlaceID = longLatToPlaceID(req.longitude, req.latitude); //should be working!
+  const courseLocationID = locations[`${req.courseLocation}`];
+  const calculatedLeaveTime = calcTimeToBus(nextClass.startTime, courseLocationID, nextStopID);
+  const timeToBeAtCurrentStop = getClosestBus(calculatedLeaveTime, req.currentCampus);
 
-  const timeToCurrentStop = calculateRoute(req.currentLocation, nextStop);
+  const timeToCurrentStop = calculateRoute(currentLocationPlaceID, nextStopID);
   const now = new Date();
 
   if(dateToSeconds(now) + timeToCurrentStop >= timeToBeAtCurrentStop) {
-    res.status(200).json("Leave for class immediately!");
+    res.status(200).json("Leave for class immediately at: " + timeToBeAtCurrentStop);
   }
 });
 
@@ -86,4 +91,4 @@ function dateToSeconds(now) {
 
   // Convert milliseconds to seconds
   return Math.floor(timeDifferenceMs / 1000);
-}
+};
