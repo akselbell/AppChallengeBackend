@@ -1,12 +1,29 @@
 import { Router } from 'express';
 import { courseSeeds } from './seeds.js';
+import { converter } from '../buses/data.js'; 
 
 
 const coursesRouter = Router();
 const courses = courseSeeds;
 
 export const calculateNextClass = () => {
-    // do something with courses
+    const currentTime = new Date();
+    const wrapper = [];
+    wrapper.push(currentTime);
+
+    let nextClass = null;
+    
+    for (const course of courseSeeds) {
+        const [hour, minute] = course.startTime.split(':').map(Number);
+        const classTime = new Date();
+        classTime.setHours(hour, minute, 0, 0);
+
+        if (classTime > currentTime && (!nextClass || classTime < nextClass.startTime)) {
+            nextClass = { ...course, startTime: classTime };
+        }
+    }
+    
+    return nextClass;
 } 
 
 //Example:   http://localhost:80/api/courses/adb117
