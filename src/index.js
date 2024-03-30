@@ -22,7 +22,6 @@ app.use('/api', coursesRouter);
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   readBusData();
-  console.log(dateToSeconds(new Date()));
 });
 
 export const locations = {
