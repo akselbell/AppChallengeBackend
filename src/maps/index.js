@@ -62,11 +62,11 @@ export const longLatToPlaceID = (longitude, latitude) => {
         } else {
             console.log('No results found');
             //console.log(data);
-            return 0;
+            return "ChIJcc6Ew6_mrIkRL7UiDgC_dGY";
         }
     } catch (error) {
         console.error('Error fetching data:', error);
-        return 0;
+        return "ChIJcc6Ew6_mrIkRL7UiDgC_dGY";
     }
   };
 

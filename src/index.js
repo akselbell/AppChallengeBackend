@@ -69,15 +69,15 @@ app.post('/api/checktime', async (req, res) => {
 
   const courseLocationID = locations[`${nextClass.building}`];
 
-  console.log("courseLocation" + courseLocationID);
-  console.log(nextClass);
+  // console.log("courseLocation" + courseLocationID);
+  // console.log(nextClass);
   const calculatedLeaveTime = await calcTimeToBus(nextClass.startTime, courseLocationID, nextStopID);
 
   const timeToBeAtCurrentStop = getClosestBus(calculatedLeaveTime, req.body.currentCampus);
 
   const timeToCurrentStop = await calculateRoute(currentLocationPlaceID, currentStopID);
 
-  //console.log("You are at: " + req.body.currentCampus + currentStopID + " and trying to get to: " + nextStop + nextStopID);
+  console.log("You are at: " + req.body.currentCampus + currentStopID + " and trying to get to: " + nextStop + nextStopID);
   
   const now = new Date();
   if(dateToSeconds(now) + timeToCurrentStop >= timeToBeAtCurrentStop-60) {
