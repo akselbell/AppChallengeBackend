@@ -12,6 +12,7 @@ export const calculateRoute = async (origin, dest) => {
 
     //console.log(data.rows[0].elements[0].duration.value);
     const roundedSeconds = Math.ceil(data.rows[0].elements[0].duration.value / 60) * 60;
+    console.log(roundedSeconds);
     return roundedSeconds; //returns number of seconds to walk to dest
   } catch (error) {
     console.error('Error fetching data:', error);
