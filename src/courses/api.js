@@ -116,4 +116,10 @@ coursesRouter.post('/courses/new', async (req, res) => {
     res.status(200).json(newCourse);
 })
 
+coursesRouter.get('/nextcourse/:netid', async (req, res) => {
+    const { netid } = req.params;
+    const nextClass = calculateNextClass(netid);  
+    res.status(200).json(nextClass);
+});
+
 export default coursesRouter;

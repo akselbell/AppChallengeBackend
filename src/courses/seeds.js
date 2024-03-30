@@ -22,7 +22,7 @@ export const courseSeeds = [
         days: "Monday, Wednesday",
         netid: "adb117",
         campus: "West"
-    }
+    },
     {
         name: "Math",
         building: "LSRC",
