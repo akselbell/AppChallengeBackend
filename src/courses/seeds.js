@@ -10,7 +10,7 @@ export const courseSeeds = [
     {
         name: "French",
         building: "Biological Sciences",
-        startTime: "7:30 AM",
+        startTime: "7:30 PM",
         days: "Saturday",
         netid: "adb117",
         campus: "West"
