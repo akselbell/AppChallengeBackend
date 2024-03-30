@@ -30,7 +30,8 @@ export const locations = {
   West: "ChIJf19QUwjkrIkReKb_L7AQnl8",
   "Biological Science": "ChIJeYjKW7DmrIkRJ9nXzx3hcfQ",
   "Marketplace": "ChIJV6yr2gnkrIkR2ZdV2qdFQV4",
-  "LSRC": "ChIJN8g9IwDnrIkR90U-FxHbKYw"
+  "LSRC": "ChIJN8g9IwDnrIkR90U-FxHbKYw",
+  "Biddle Music Building": "ChIJcQBAw_fjrIkRzuJO9NOGmrc",
 };
 
 app.get('/api/getData/:netid', async (req, res) => {
