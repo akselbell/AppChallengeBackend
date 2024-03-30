@@ -59,7 +59,8 @@ app.post('/api/checktime', async (req, res) => {
   const nextStop = req.currentCampus == 'East' ? "West" : "East";
   console.log("You want to get to " + nextStop + " campus");
   const nextStopID = locations[`${nextStop}`];
-  const currentStopID = locations[`${req.currentCampus}`];
+  console.log(nextStopID);
+  const currentStopID = locations[`${req.body.currentCampus}`];
 
   const nextClass = calculateNextClass(req.body.netid);
 
@@ -75,11 +76,11 @@ app.post('/api/checktime', async (req, res) => {
   
   const now = new Date();
   if(dateToSeconds(now) + timeToCurrentStop >= timeToBeAtCurrentStop-60) {
-    res.status(200).json("Leave for class immediately now!");
+    res.status(200).json("NOW!");
   }
   else {
     const parsedTime = secondsToTime(timeToBeAtCurrentStop - 60 - timeToCurrentStop);
-    res.status(200).json("Leave for class immediately at: " + parsedTime.hours + ":"+parsedTime.minutes + " "+ parsedTime.amPm);
+    res.status(200).json(parsedTime.hours + ":"+parsedTime.minutes + " "+ parsedTime.amPm);
   }
 });
 

@@ -8,6 +8,8 @@ export const calculateRoute = async (origin, dest) => {
       },
     });
     const data = await response.json();
+    console.log(data);
+
     //console.log(data.rows[0].elements[0].duration.value);
     const roundedSeconds = Math.ceil(data.rows[0].elements[0].duration.value / 60) * 60;
     console.log(roundedSeconds);
