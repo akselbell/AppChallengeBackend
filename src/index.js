@@ -3,9 +3,12 @@ import fetch from 'node-fetch';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import coursesRouter from './courses/api.js';
-import mapsRouter from './maps/api.js';
+import { calculateRoute } from './maps/index.js';
 import bodyParser from 'body-parser';
 import readBusData from './buses/data.js';
+import calcTimeToBus from './buses/index.js';
+import getClosestBus from './buses/data.js'
+import { calculateNextClass } from './courses/api.js';
 dotenv.config();
 
 const app = express();
@@ -15,7 +18,6 @@ app.use(cors()); // Enable CORS for all routes
 const PORT = 80;
 
 app.use('/api', coursesRouter);
-app.use('/api', mapsRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
@@ -25,8 +27,8 @@ app.listen(PORT, () => {
 export const locations = {
   westBusStop: "ChIJ0UhDlq_mrIkR88gG4tqrCNw",
   eastBusStop: "ChIJf19QUwjkrIkReKb_L7AQnl8",
-  "Bio Sci": "ChIJeYjKW7DmrIkRJ9nXzx3hcfQ",
-  "Market Place": "ChIJV6yr2gnkrIkR2ZdV2qdFQV4"
+  "Biological Science": "ChIJeYjKW7DmrIkRJ9nXzx3hcfQ",
+  "Marketplace": "ChIJV6yr2gnkrIkR2ZdV2qdFQV4"
 };
 
 app.get('/api/getData/:netid', async (req, res) => {
@@ -48,5 +50,18 @@ app.get('/api/getData/:netid', async (req, res) => {
 });
 
 app.get('/api/checktime', async (req, res) => {
-  // req will contain the current location, nextClass start time, nextClass location, current campus
+  // req must have atttributes: classStartTime, courseLocation, currentCampus, currentLocation   
+  const nextClass = calculateNextClass();
+  const calculatedLeaveTime = calcTimeToBus(nextClass.startTime, req.courseLocation);
+  const timeToBeAtCurrentStop = getClosestBus(calculatedLeaveTime, currentCampus);
+
+  const nextStop = req.campus == 'East' ? "West" : "East";
+  console.log("You are trying to get to " + nextStop + "bus stop");
+
+  const timeToCurrentStop = calculateRoute(req.currentLocation, nextStop);
+  const now = new Date(); // need to compute this in seconds since midnight
+
+  if(now + timeToCurrentStop >= timeToBeAtCurrentStop) {
+    res.status(200).json("Leave for class immediately!");
+  }
 });

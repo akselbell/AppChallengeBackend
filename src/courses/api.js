@@ -5,6 +5,10 @@ import { courseSeeds } from './seeds.js';
 const coursesRouter = Router();
 const courses = courseSeeds;
 
+export const calculateNextClass = () => {
+    // do something with courses
+} 
+
 //Example:   http://localhost:80/api/courses/adb117
 coursesRouter.get('/courses/:netid', async (req, res) => {
     const { netid } = req.params;

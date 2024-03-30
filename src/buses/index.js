@@ -1,12 +1,14 @@
 import converter from './data.js';
 
-const calcTimeToBus = (classStartTime, currentLocation, course) => {
+const calcTimeToBus = (courseStartTime, courseLocation) => {
     //classStartTime must be in format: 6:30 AM
     const wrapper = [];
-    wrapper.push(classStartTime);
+    wrapper.push(courseStartTime);
 
     const classTimeSeconds = converter(wrapper);
-    const stopToClass = googleMaps(currentBusStop, course.location);
+
+    const stopToClass = calculateRoute(oppositeBusStop, courseLocation);
     return classTimeSeconds - stopToClass - 9*60;
 };
 
+export default calcTimeToBus;

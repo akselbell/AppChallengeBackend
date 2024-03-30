@@ -29,7 +29,6 @@ const readBusData = () => {
                 .on('end', () => {
                     eastTimesSeconds = converter(eastTimes);
                     westTimesSeconds = converter(westTimes);
-                    console.log(getClosestBus(49685, "East"));
                 });
         });
 };
@@ -47,10 +46,11 @@ function converter(times) {
     return timesInSeconds;
 }
 
-function getClosestBus(time, departingCampus) {
+export function getClosestBus(time, departingCampus) {
     let closestTime = null;
     let minDifference = Infinity;
-    const timesArray = departingCampus === 'East' ? eastTimesSeconds : westTimesSeconds;
+    const timesArray = departingCampus == 'East' ? eastTimesSeconds : westTimesSeconds;
+    console.log("You are currently on: " + departingCampus);
 
     timesArray.forEach(busTime => {
         const difference = time - busTime;
