@@ -49,8 +49,7 @@ export const calculateNextClass = (netid) => {
             }
         }
     }
-    console.log("Closest COURSES:");
-    console.log(closestCourses);
+    //console.log(closestCourses);
     if (closestCourses.length === 1) {
         console.log(closestCourses[0]);
         return closestCourses[0];
@@ -70,7 +69,7 @@ export const calculateNextClass = (netid) => {
                 minDiffSeconds = difference;
             }
         }
-        console.log(closestCourse);
+        //console.log(closestCourse);
         return closestCourse;
     }
 
@@ -86,7 +85,7 @@ export const calculateNextClass = (netid) => {
         }
     }
 
-    console.log(closestCourse);
+    //console.log(closestCourse);
     return closestCourse;
 } 
 

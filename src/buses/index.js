@@ -1,15 +1,14 @@
-import converter from './data.js';
+import { converter } from './data.js';
 import { calculateRoute } from '../maps/index.js';
 
-const calcTimeToBus = (courseStartTime, courseLocation, oppositeBusStop) => {
+const calcTimeToBus = async (courseStartTime, courseLocation, oppositeBusStop) => {
     //classStartTime must be in format: 6:30 AM
-    const wrapper = [];
-    wrapper.push(courseStartTime);
+    const classTimeSeconds = converter([{"STOP": courseStartTime}]);
+    //converter([{"STOP": course.startTime}])
+    //console.log("course: " + courseLocation + " oppositeBustStop = " + oppositeBusStop);
 
-    const classTimeSeconds = converter(wrapper);
-
-    const stopToClass = calculateRoute(oppositeBusStop, courseLocation);
-    return classTimeSeconds - stopToClass - 9*60;
+    const stopToClass = await calculateRoute(oppositeBusStop, courseLocation);
+    return classTimeSeconds[0] - stopToClass - 7*60;
 };
 
 export default calcTimeToBus;

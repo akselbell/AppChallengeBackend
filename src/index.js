@@ -7,7 +7,7 @@ import { calculateRoute, longLatToPlaceID } from './maps/index.js';
 import bodyParser from 'body-parser';
 import readBusData from './buses/data.js';
 import calcTimeToBus from './buses/index.js';
-import getClosestBus from './buses/data.js'
+import { getClosestBus } from './buses/data.js'
 import { calculateNextClass } from './courses/api.js';
 dotenv.config();
 
@@ -22,13 +22,15 @@ app.use('/api', coursesRouter);
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   readBusData();
+  //longLatToPlaceID(-78.9386381, 36.0022893);
 });
 
 export const locations = {
   East: "ChIJ0UhDlq_mrIkR88gG4tqrCNw",
   West: "ChIJf19QUwjkrIkReKb_L7AQnl8",
   "Biological Science": "ChIJeYjKW7DmrIkRJ9nXzx3hcfQ",
-  "Marketplace": "ChIJV6yr2gnkrIkR2ZdV2qdFQV4"
+  "Marketplace": "ChIJV6yr2gnkrIkR2ZdV2qdFQV4",
+  "LSRC": "ChIJN8g9IwDnrIkR90U-FxHbKYw"
 };
 
 app.get('/api/getData/:netid', async (req, res) => {
@@ -50,26 +52,35 @@ app.get('/api/getData/:netid', async (req, res) => {
 });
 
 app.get('/api/checktime', async (req, res) => {
-  // req must have atttributes: classStartTime, courseLocation, currentCampus, longitude, latitude  
+  // req must have atttributes: course, currentCampus, longitude, latitude, netid  
   
   // if time now is not within 30 min of start time, just return response saying not time yet
   
   const nextStop = req.currentCampus == 'East' ? "West" : "East";
   const nextStopID = locations[`${nextStop}`];
-  console.log("You are trying to get to " + nextStop + "bus stop at ID: " + nextStopID);
 
-  const nextClass = calculateNextClass();
+  const nextClass = calculateNextClass(req.body.netid);
 
-  const currentLocationPlaceID = longLatToPlaceID(req.longitude, req.latitude); //should be working!
-  const courseLocationID = locations[`${req.courseLocation}`];
-  const calculatedLeaveTime = calcTimeToBus(nextClass.startTime, courseLocationID, nextStopID);
-  const timeToBeAtCurrentStop = getClosestBus(calculatedLeaveTime, req.currentCampus);
+  const currentLocationPlaceID = await longLatToPlaceID(req.body.longitude, req.body.latitude);
 
-  const timeToCurrentStop = calculateRoute(currentLocationPlaceID, nextStopID);
+  const courseLocationID = locations[`${nextClass.building}`];
+
+  const calculatedLeaveTime = await calcTimeToBus(nextClass.startTime, courseLocationID, nextStopID);
+  console.log(calculatedLeaveTime);
+
+  const timeToBeAtCurrentStop = getClosestBus(calculatedLeaveTime, req.body.currentCampus);
+  console.log(timeToBeAtCurrentStop);
+
+  const timeToCurrentStop = await calculateRoute(currentLocationPlaceID, nextStopID);
+  console.log(timeToCurrentStop);
+  
   const now = new Date();
-
-  if(dateToSeconds(now) + timeToCurrentStop >= timeToBeAtCurrentStop) {
-    res.status(200).json("Leave for class immediately at: " + timeToBeAtCurrentStop);
+  if(dateToSeconds(now) + timeToCurrentStop >= timeToBeAtCurrentStop-60) {
+    res.status(200).json("Leave for class immediately now!");
+  }
+  else {
+    const parsedTime = secondsToTime(timeToBeAtCurrentStop - 60 - timeToCurrentStop);
+    res.status(200).json("Leave for class immediately at: " + parsedTime.hours + ":"+parsedTime.minutes + " "+ parsedTime.amPm);
   }
 });
 
@@ -92,3 +103,21 @@ function dateToSeconds(now) {
   // Convert milliseconds to seconds
   return Math.floor(timeDifferenceMs / 1000);
 };
+
+function secondsToTime(seconds) {
+  //console.log(seconds);
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  
+  const amPm = hours >= 12 ? 'PM' : 'AM';
+  
+  const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
+  
+  const formattedMinutes = String(minutes).padStart(2, '0');
+  
+  return {
+    hours: formattedHours,
+    minutes: formattedMinutes,
+    amPm: amPm
+  };
+}
