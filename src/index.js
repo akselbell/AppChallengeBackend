@@ -56,7 +56,6 @@ app.post('/api/checktime', async (req, res) => {
   // req must have atttributes: course, currentCampus, longitude, latitude, netid  
   
   // if time now is not within 30 min of start time, just return response saying not time yet
-  
   const nextStop = req.body.currentCampus == 'East' ? "West" : "East";
   console.log("You want to get to " + nextStop + " campus");
   const nextStopID = locations[`${nextStop}`];
