@@ -23,7 +23,7 @@ coursesRouter.post('/courses/new', async (req, res) => {
     const newCourse = req.body;
     console.log(newCourse);
 
-    if (!newCourse.name || !newCourse.building || !newCourse.startTime || !newCourse.endTime || !newCourse.days || !newCourse.netid) {
+    if (!newCourse.name || !newCourse.building || !newCourse.startTime || !newCourse.days || !newCourse.netid) {
         return res.status(400).json({ error: 'All fields are required for course creation' });
     }
 

@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 import coursesRouter from './courses/api.js';
 import mapsRouter from './maps/api.js';
 import bodyParser from 'body-parser';
-import readBusData from './buses/index.js';
+import readBusData from './buses/data.js';
 dotenv.config();
 
 const app = express();
@@ -45,4 +45,8 @@ app.get('/api/getData/:netid', async (req, res) => {
       console.error('Error fetching data:', error);
       res.status(500).json({ error: 'Internal Server Error' });
     }
+});
+
+app.get('/api/checktime', async (req, res) => {
+  // req will contain the current location, nextClass start time, nextClass location, current campus
 });
