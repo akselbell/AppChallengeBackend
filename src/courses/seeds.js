@@ -8,12 +8,12 @@ export const courseSeeds = [
         campus: "East"
     },
     {
-        name: "French",
-        building: "Biological Sciences",
+        name: "Piano 101",
+        building: "Biddle Music Building",
         startTime: "7:30 PM",
         days: "Saturday",
         netid: "adb117",
-        campus: "West"
+        campus: "East"
     },
     {
         name: "Math",
