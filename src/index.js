@@ -57,7 +57,9 @@ app.get('/api/checktime', async (req, res) => {
   // if time now is not within 30 min of start time, just return response saying not time yet
   
   const nextStop = req.currentCampus == 'East' ? "West" : "East";
+  console.log("You want to get to " + nextStop + " campus");
   const nextStopID = locations[`${nextStop}`];
+  const currentStopID = locations[`${req.currentCampus}`];
 
   const nextClass = calculateNextClass(req.body.netid);
 
@@ -66,13 +68,10 @@ app.get('/api/checktime', async (req, res) => {
   const courseLocationID = locations[`${nextClass.building}`];
 
   const calculatedLeaveTime = await calcTimeToBus(nextClass.startTime, courseLocationID, nextStopID);
-  console.log(calculatedLeaveTime);
 
   const timeToBeAtCurrentStop = getClosestBus(calculatedLeaveTime, req.body.currentCampus);
-  console.log(timeToBeAtCurrentStop);
 
   const timeToCurrentStop = await calculateRoute(currentLocationPlaceID, nextStopID);
-  console.log(timeToCurrentStop);
   
   const now = new Date();
   if(dateToSeconds(now) + timeToCurrentStop >= timeToBeAtCurrentStop-60) {
