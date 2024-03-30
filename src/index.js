@@ -22,6 +22,7 @@ app.use('/api', coursesRouter);
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   readBusData();
+  console.log(dateToSeconds(new Date()));
 });
 
 export const locations = {
@@ -50,7 +51,8 @@ app.get('/api/getData/:netid', async (req, res) => {
 });
 
 app.get('/api/checktime', async (req, res) => {
-  // req must have atttributes: classStartTime, courseLocation, currentCampus, currentLocation   
+  // req must have atttributes: classStartTime, courseLocation, currentCampus, currentLocation  
+  // if time now is not within 30 min of start time, just return response saying not time yet
   const nextClass = calculateNextClass();
   const calculatedLeaveTime = calcTimeToBus(nextClass.startTime, req.courseLocation);
   const timeToBeAtCurrentStop = getClosestBus(calculatedLeaveTime, currentCampus);
@@ -59,9 +61,29 @@ app.get('/api/checktime', async (req, res) => {
   console.log("You are trying to get to " + nextStop + "bus stop");
 
   const timeToCurrentStop = calculateRoute(req.currentLocation, nextStop);
-  const now = new Date(); // need to compute this in seconds since midnight
+  const now = new Date();
 
-  if(now + timeToCurrentStop >= timeToBeAtCurrentStop) {
+  if(dateToSeconds(now) + timeToCurrentStop >= timeToBeAtCurrentStop) {
     res.status(200).json("Leave for class immediately!");
   }
 });
+
+function dateToSeconds(now) {
+  const currentTimeMs = now.getTime();
+
+  // Create a new Date object for midnight (00:00:00)
+  const midnight = new Date(now);
+  midnight.setHours(0);
+  midnight.setMinutes(0);
+  midnight.setSeconds(0);
+  midnight.setMilliseconds(0);
+
+  // Get the midnight time in milliseconds since Unix Epoch
+  const midnightTimeMs = midnight.getTime();
+
+  // Calculate the difference in milliseconds between current time and midnight
+  const timeDifferenceMs = currentTimeMs - midnightTimeMs;
+
+  // Convert milliseconds to seconds
+  return Math.floor(timeDifferenceMs / 1000);
+}
