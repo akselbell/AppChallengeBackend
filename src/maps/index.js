@@ -1,5 +1,6 @@
 export const calculateRoute = async (origin, dest) => {
   const url = `https://maps.googleapis.com/maps/api/distancematrix/json?destinations=place_id:${dest}&origins=place_id:${origin}&mode=walking&key=${process.env.GOOGLE_MAPS_API_KEY}`;
+  console.log(origin + " " + dest);
   try {
     const response = await fetch(url, {
       method: 'POST',
