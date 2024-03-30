@@ -17,9 +17,7 @@ const dayNameToIndex = {
 };
 
 export const calculateNextClass = (netid) => {
-    console.log(courseSeeds);
     const courses = courseSeeds.filter(course => course.netid === netid);
-    console.log(courses);
     const today = new Date().getDay(); // Get the current day index (0 for Sunday, 1 for Monday, ..., 6 for Saturday)
     let closestCourses = null;
     let minDiff = 100;
@@ -51,7 +49,6 @@ export const calculateNextClass = (netid) => {
     }
     //console.log(closestCourses);
     if (closestCourses.length === 1) {
-        console.log(closestCourses[0]);
         return closestCourses[0];
     }
 
@@ -69,12 +66,10 @@ export const calculateNextClass = (netid) => {
                 minDiffSeconds = difference;
             }
         }
-        //console.log(closestCourse);
         return closestCourse;
     }
 
     // neither courses are on today, in this case select one with earlier time
-    console.log("Both courses same day, but not today");
     let minTime = 1000000000;
     let closestCourse = null;
     for (const course of closestCourses) {
@@ -84,8 +79,6 @@ export const calculateNextClass = (netid) => {
             minTime = classTimeSeconds;
         }
     }
-
-    //console.log(closestCourse);
     return closestCourse;
 } 
 
